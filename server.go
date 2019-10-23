@@ -2,28 +2,30 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"log"
-	"os"
 	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
+
+	"./helper"
 )
 
 var (
-	path = "./config/" // remember to end with /
-	BasicAuth = false
-	validUsername = "guest"
-	validPassword = "guest"
+	path            = "./config/" // remember to end with /
+	encryptPassword = "somehardpw"
+	BasicAuth       = false
+	validUsername   = "guest"
+	validPassword   = "guest"
 )
-
 
 // fileExists checks if a file exists and is not a directory before we
 // try using it to prevent further errors.
 func fileExists(filename string) bool {
-    info, err := os.Stat(filename)
-    if os.IsNotExist(err) {
-        return false
-    }
-    return !info.IsDir()
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
 }
 
 // getConfig : handler for getting config data
@@ -53,25 +55,32 @@ func getConfig(w http.ResponseWriter, r *http.Request) {
 
 		// path already end with slash
 		if fileExists(path + ConfigFile) {
-		    b, err := ioutil.ReadFile(path + ConfigFile)
-		    if err != nil {
-		        http.Error(w, "Failed to read file", 500)
-		        return
-		    }
+			b, err := ioutil.ReadFile(path + ConfigFile)
+			if err != nil {
+				http.Error(w, "Failed to read file", 500)
+				return
+			}
 
-		    // return json content from file as string
-		    fmt.Fprintf(w, string(b))
-		    return
+			encrypted, err := helper.Encrypt(b, encryptPassword)
+
+			if err != nil {
+				http.Error(w, "Failed to encrypt data", 500)
+				return
+			}
+
+			// return json content from file as string
+			fmt.Fprintf(w, string(encrypted))
+			return
 		} else {
-		    http.Error(w, "File doesn't exist!", 500)
-		    return
+			http.Error(w, "File doesn't exist!", 500)
+			return
 		}
 	}
-    fmt.Fprintf(w, "only get my dudeeeeeeeeeeee")
+	fmt.Fprintf(w, "only get my dudeeeeeeeeeeee")
 }
 
 func main() {
-    http.HandleFunc("/config", getConfig)
-    fmt.Println("starting to listen on :6969")
-    log.Fatal(http.ListenAndServe(":6969", nil))
+	http.HandleFunc("/config", getConfig)
+	fmt.Println("starting to listen on :6969")
+	log.Fatal(http.ListenAndServe(":6969", nil))
 }
