@@ -69,7 +69,7 @@ func getConfig(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// return json content from file as string
-			fmt.Fprintf(w, string(encrypted))
+			w.Write(encrypted)
 			return
 		} else {
 			http.Error(w, "File doesn't exist!", 500)
