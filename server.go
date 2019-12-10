@@ -61,10 +61,10 @@ func getConfig(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			encrypted := aes256.Encrypt(b, encryptPassword)
+			encrypted := aes256.Encrypt(string(b), encryptPassword)
 
 			// return json content from file as string
-			w.Write(encrypted)
+			w.Write([]byte(encrypted))
 			return
 		} else {
 			http.Error(w, "File doesn't exist!", 500)
