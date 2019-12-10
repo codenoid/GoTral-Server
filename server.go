@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"./helper"
 )
+
+import "github.com/mervick/aes-everywhere/go/aes256"
 
 var (
 	path            = "./config/" // remember to end with /
@@ -61,12 +61,7 @@ func getConfig(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			encrypted, err := helper.Encrypt(b, encryptPassword)
-
-			if err != nil {
-				http.Error(w, "Failed to encrypt data", 500)
-				return
-			}
+			encrypted := aes256.Encrypt(b, encryptPassword)
 
 			// return json content from file as string
 			w.Write(encrypted)
