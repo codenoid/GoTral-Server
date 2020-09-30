@@ -1,0 +1,3 @@
+github.com/mervick/aes-everywhere v1.1.3 h1:EaX4rrAdPneeMwNloibT6frM13+jOmcVIqopekyz5WQ=
+github.com/mervick/aes-everywhere/go/aes256 v0.0.0-20200907200845-eff87648c75f h1:ughpnXdoEeOGlSwXSl3nqqLyS6mUMTS4ydnb+Z/XF3U=
+github.com/mervick/aes-everywhere/go/aes256 v0.0.0-20200907200845-eff87648c75f/go.mod h1:Eb5RMoo9kOQra/2uRiUTGP+LfNuM13Vqm7y7P34+KKo=
